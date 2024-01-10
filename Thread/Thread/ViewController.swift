@@ -17,15 +17,14 @@ class BankAccount {
         print("Пополнение: \(amount), итого : \(balance)")
         lock.unlock()
     }
-    
     func withdraw ( amount : Double ) {
         lock.lock()
         if balance >= amount {
             balance -= amount
+            print("Снятие: \(amount), итого : \(balance)")
         } else {
             print ("Недостаточно средств")
         }
-        print("Снятие: \(amount), итого : \(balance)")
         lock.unlock()
     }
 }
@@ -44,9 +43,12 @@ class ViewController: UIViewController {
         let secondThread = Thread {
             self.bankAccount.withdraw(amount: 10)
         }
-        
+        let nextThread = Thread {
+            self.bankAccount.deposit(amount: 20)
+        }
         firstThread.start()
         secondThread.start()
+        nextThread.start()
         
     }
 
